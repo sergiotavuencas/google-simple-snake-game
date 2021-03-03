@@ -7,6 +7,11 @@ let context = canvas.getContext(
 let box = 32; /* Quantidade de pixels */
 let snake = [{ x: 8 * box, y: 8 * box }]; /* Posiciona a cobra no meio */
 let direction = "right";
+let food = {
+  /* Math.floor retira o ponto flutuante */
+  x: Math.floor(Math.random() * 15 + 1) * box,
+  y: Math.floor(Math.random() * 15 + 1) * box,
+};
 
 function createBG() {
   context.fillStyle = "lightgreen"; /* Define a cor do elemento */
@@ -25,6 +30,11 @@ function createSnake() {
   }
 }
 
+function drawFood() {
+  context.fillStyle = "red";
+  context.fillRect(food.x, food.y, box, box);
+}
+
 document.addEventListener("keydown", update);
 
 function update(event) {
@@ -40,8 +50,16 @@ function startGame() {
   if (snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
   if (snake[0].y < 0 * box && direction == "up") snake[0].y = 16 * box;
 
+  for (i = 1; i < snake.length; i++) {
+    if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+      clearInterval(game);
+      alert("Game Over");
+    }
+  }
+
   createBG();
   createSnake();
+  drawFood();
 
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
@@ -54,8 +72,13 @@ function startGame() {
       2; /* Como a renderização começa do canto superior esquerdo, y é invertido */
   if (direction == "down") snakeY += box / 2;
 
-  /* Remove o último elemento do array */
-  snake.pop();
+  if (snakeX != food.x || snakeY != food.y) {
+    /* Remove o último elemento do array */
+    snake.pop();
+  } else {
+    food.x = Math.floor(Math.random() * 15 + 1) * box;
+    food.y = Math.floor(Math.random() * 15 + 1) * box;
+  }
 
   /* Cria um novo elemento após a cobra ter mudado de posição */
   let newHead = {
