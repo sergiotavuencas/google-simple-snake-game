@@ -1,0 +1,9 @@
+body {
+  height: 95vh; /* vh - view height */
+  width: 95;
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente no meio */
+  align-items: center; /* Alinha verticalmente no meio */
+  flex-direction: column; /* Itens são alinhados um abaixo do outro */
+  color: rgb(0, 160, 21);
+}
